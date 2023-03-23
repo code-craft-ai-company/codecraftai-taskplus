@@ -1,10 +1,2 @@
-# Python Package Template
-
-This is a template repository that can be used to start off a python package project.
-
-# Features of this Template
-
-* Machine Setup
-* Virtual Environment Setup (Poetry)
-* PyPi Publishing
-* Sphinx Documentation
+# Automation Mojo - Task Plus Package (taskplus)
+This is the repository for a task running package written in python.
