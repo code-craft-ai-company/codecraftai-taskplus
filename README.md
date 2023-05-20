@@ -1,2 +1,2 @@
-# python-package-template
-This is a template repository that can be used to quickly create a python package project.
+# Automation Mojo - TaskPlus Package
+This is a preliminary release of the TaskPlus job engine.  This is a very preliminary release and is not intended for public consumption yet.
