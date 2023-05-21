@@ -1,8 +1,10 @@
 [tool.poetry]
 name = "mojo-taskplus"
 description = "Automation Mojo Task Plus Library"
-version = "0.0.1"
-authors = []
+version = "0.0.2"
+authors = [
+    "Myron Walker <myron.walker@gmail.com>"
+]
 readme = "README.md"
 license = "LICENSE.txt"
 classifiers = [
