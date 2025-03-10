@@ -8,26 +8,20 @@
 """
 
 __author__ = "Myron Walker"
-__copyright__ = "Copyright 2023, Myron W Walker"
+__copyright__ = "Copyright 2025, Automation Mojo LLC"
 __credits__ = []
-__version__ = "1.0.0"
-__maintainer__ = "Myron Walker"
-__email__ = "myron.walker@gmail.com"
-__status__ = "Development" # Prototype, Development or Production
-__license__ = "MIT"
 
-from typing import Optional
+
+from typing import Any, Dict, Optional
 
 import os
-import stat
 import subprocess
 
-from mojo.runtime.paths import get_temporary_file
-from mojo.xmods.xformatting import indent_lines
+from automojo.foundation.xformatting import indent_lines
 
-from mojo.taskplus.tasks.taskbase import TaskBase
+from automojo.taskplus.model.task import Task
 
-class RunCommand(TaskBase):
+class RunCommand(Task):
 
     def __init__(self, ordinal: str, label: str, task_info: dict, logger):
         super(RunCommand, self).__init__(ordinal, label, task_info, logger)
@@ -38,9 +32,7 @@ class RunCommand(TaskBase):
     def command(self) -> str:
         return self._command
 
-    def execute(self, parameters: Optional[dict]=None, topology: Optional[dict]=None, **kwargs) -> int:
-
-        self._logger.info("STEP: %s - %s" % (self._label, self._ordinal))
+    def perform_task(self, environment: Dict[str, str], parameters: Optional[Dict[str, Any]], flowstate: Dict[str, Any]) -> int:
 
         self._logger.info("Running Command: %s" % self._command)
 

@@ -1,18 +1,14 @@
 __author__ = "Myron Walker"
 __copyright__ = "Copyright 2023, Myron W Walker"
 __credits__ = []
-__version__ = "1.0.0"
-__maintainer__ = "Myron Walker"
-__email__ = "myron.walker@gmail.com"
-__status__ = "Development" # Prototype, Development or Production
-__license__ = "MIT"
+
 
 import os
 
 import click
 import yaml
 
-from mojo.xmods.xlogging.levels import LOG_LEVEL_NAMES
+from automojo.foundation.xlogging.levels import LOG_LEVEL_NAMES
 
 HELP_WORK = "The file containing the workpacket detail for performing a workflow orchestration."
 HELP_OUTPUT = "The output directory where results and artifacts are collected."
@@ -30,7 +26,7 @@ def group_taskplus_workflow():
 @click.option("--start", default=None, required=False, help=HELP_START)
 @click.option("--console-level", default=None, required=False, type=click.Choice(LOG_LEVEL_NAMES, case_sensitive=False), help=HELP_CONSOLE_LOG_LEVEL)
 @click.option("--logfile-level", default=None, required=False, type=click.Choice(LOG_LEVEL_NAMES, case_sensitive=False), help=HELP_FILE_LOG_LEVEL)
-def command_taskplus_workflow_run(workflow, output=None, start=None, console_level=None, logfile_level=None):
+def command_taskplus_workflow_run(workflow: str , output: str=None, start=None, console_level=None, logfile_level=None):
 
     # pylint: disable=unused-import,import-outside-toplevel
 
@@ -40,8 +36,8 @@ def command_taskplus_workflow_run(workflow, output=None, start=None, console_lev
 
     # IMPORTANT: We need to load the context first because it will trigger the loading
     # of the default user configuration
-    from mojo.xmods.xcollections.context import Context
-    from mojo.xmods.xpython import extend_path
+    from automojo.foundation.collections.context import Context
+    from automojo.foundation.xpython import prepend_python_path
     
 
     ctx = Context()
@@ -59,7 +55,7 @@ def command_taskplus_workflow_run(workflow, output=None, start=None, console_lev
 
     if workflow_info is not None:
 
-        from mojo.taskplus.entrypoints import run_workflow_entrypoint
+        from automojo.taskplus.entrypoints import run_workflow_entrypoint
 
         # Run the work packet
         run_workflow_entrypoint(workflow_file, workflow_info)

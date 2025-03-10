@@ -10,17 +10,17 @@
 __author__ = "Myron Walker"
 __copyright__ = "Copyright 2020, Myron W Walker"
 __credits__ = []
-__version__ = "1.0.0"
-__maintainer__ = "Myron Walker"
-__email__ = "myron.walker@gmail.com"
-__status__ = "Development" # Prototype, Development or Production
-__license__ = "MIT"
+
+
+from typing import Any, Dict, List
 
 import os
 
-from mojo.xmods.ximport import import_by_name
+from automojo.foundation.ximport import import_by_name
 
-from mojo.xmods.exceptions import ConfigurationError
+from automojo.errors.exceptions import ConfigurationError
+
+from automojo.taskplus.model.task import Task
 
 
 class JumpContext:
@@ -29,7 +29,7 @@ class JumpContext:
         self.on_success_section = None
 
 
-def execute_tasklist(logger, jump_context: JumpContext, parameters: dict, tasklist: list, ordinal_prefix: str=None, **kwargs):
+def execute_tasklist(logger, jump_context: JumpContext, parameters: dict, tasklist: List[Dict[str, Any]], ordinal_prefix: str=None, **kwargs):
 
     result_code = 0
 
@@ -41,7 +41,8 @@ def execute_tasklist(logger, jump_context: JumpContext, parameters: dict, taskli
 
         if "task" in item:
 
-            task_info: dict = item
+            task_info: Dict[str, Any] = item
+
             task_label = task_info["task"]
 
             if jump_context.on_success_section is not None:
@@ -64,13 +65,13 @@ def execute_tasklist(logger, jump_context: JumpContext, parameters: dict, taskli
             if hasattr(task_module, task_module_class):
                 task_class = getattr(task_module, task_module_class)
 
-                task_instance = task_class(nxt_ordinal, task_label, task_info, logger)
+                task_instance: Task = task_class(nxt_ordinal, task_label, task_info, logger)
 
                 task_result = task_instance.execute(parameters=parameters, **kwargs)
                 if task_result != 0:
                     result_code = 1
                     if task_instance.onfailure is not None:
-                        failure_section = task_instance.onfailure
+                        jump_context.on_failure_section = task_instance.onfailure
                 elif task_instance.onsuccess is not None:
                     jump_context.on_success_section = task_instance.onsuccess
 

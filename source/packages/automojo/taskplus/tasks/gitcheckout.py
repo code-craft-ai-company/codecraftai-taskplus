@@ -8,27 +8,21 @@
 """
 
 __author__ = "Myron Walker"
-__copyright__ = "Copyright 2023, Myron W Walker"
+__copyright__ = "Copyright 2025, Automation Mojo LLC"
 __credits__ = []
-__version__ = "1.0.0"
-__maintainer__ = "Myron Walker"
-__email__ = "myron.walker@gmail.com"
-__status__ = "Development" # Prototype, Development or Production
-__license__ = "MIT"
 
-from typing import Optional
 
-from mojo.taskplus.tasks.taskbase import TaskBase
+from typing import Any, Dict, Optional
 
-class GitCheckout(TaskBase):
+from automojo.taskplus.model.task import Task
+
+class GitCheckout(Task):
 
     def __init__(self, ordinal: str, label: str, task_info: dict, logger):
         super(GitCheckout, self).__init__(ordinal, label, task_info, logger)
         return
 
-    def execute(self, parameters: Optional[dict]=None, topology: Optional[dict]=None, **kwargs) -> int:
-
-        self._logger.info("STEP: %s - %s" % (self._label, self._ordinal))
+    def perform_task(self, environment: Dict[str, str], parameters: Optional[Dict[str, Any]], flowstate: Dict[str, Any]) -> int:
 
         exit_code = 0
         return exit_code

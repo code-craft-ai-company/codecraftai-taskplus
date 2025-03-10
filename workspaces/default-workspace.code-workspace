@@ -5,7 +5,7 @@
         }
     ],
     "settings": {
-        "python.defaultInterpreterPath": "/home/myron/repos/taskplus/.venv/bin/python3.10",
+        "python.defaultInterpreterPath": "/home/myron/repos/taskplus/.venv/bin/python3.12",
         "python.envFile": "/home/myron/repos/taskplus/.cache/development.env",
         "terminal.integrated.env.linux": {
             "PYTHONPATH": "/home/myron/repos/taskplus/source/packages"
@@ -16,7 +16,7 @@
             }
         },
         "python.analysis.extraPaths": [
-            "/home/myron/repos/taskplus/.venv/lib/python3.10/site-packages",
+            "/home/myron/repos/taskplus/.venv/lib/python3.12/site-packages",
             "/home/myron/repos/taskplus/source/packages"
         ],
         "python.terminal.activateEnvInCurrentTerminal": true

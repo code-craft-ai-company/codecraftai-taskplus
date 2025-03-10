@@ -8,23 +8,19 @@
 """
 
 __author__ = "Myron Walker"
-__copyright__ = "Copyright 2023, Myron W Walker"
+__copyright__ = "Copyright 2025, Automation Mojo LLC"
 __credits__ = []
-__version__ = "1.0.0"
-__maintainer__ = "Myron Walker"
-__email__ = "myron.walker@gmail.com"
-__status__ = "Development" # Prototype, Development or Production
-__license__ = "MIT"
 
-from typing import List, Optional
+
+from typing import Any, Dict, List, Optional
 
 import os
 
-from mojo.xmods.xformatting import indent_lines
+from automojo.foundation.xformatting import indent_lines
 
-from mojo.taskplus.tasks.taskbase import TaskBase
+from automojo.taskplus.model.task import Task
 
-class EmbeddedPython(TaskBase):
+class EmbeddedPython(Task):
     """
         A task class that is used to setup the running of an embedded python script
         in the context of the automation worker.
@@ -39,12 +35,7 @@ class EmbeddedPython(TaskBase):
     def script(self) -> List[str]:
         return self._script
 
-    def execute(self, parameters: Optional[dict]=None, topology: Optional[dict]=None, **kwargs) -> int:
-
-        self._logger.info("STEP: %s - %s" % (self._label, self._ordinal))
-
-        locals().update({"parameters": parameters, "topology": topology})
-        locals().update(kwargs)
+    def perform_task(self, environment: Dict[str, str], parameters: Optional[Dict[str, Any]], flowstate: Dict[str, Any]) -> int:
 
         script_content = os.linesep.join(self._script)
         script_content = indent_lines(script_content, level=3)
