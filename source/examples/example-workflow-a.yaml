@@ -1,3 +1,4 @@
+
 name: Example Workflow A
 environment:
     AKIT_BUILD_BRANCH: somebranch
@@ -7,7 +8,9 @@ environment:
 parameters:
     branch: somebranch
     build: somebuild-2.1.456
+
     landscape: $HOME/automojo/config/default-landscape.yaml
+
 
 tasklist:
     - task: Print OS Name
@@ -20,3 +23,17 @@ tasklist:
       tasktype: automojo.taskplus.tasks.shellscript@BashScript
       script:
           - ls -al
+
+    - taskgroup: Test Group
+      items:
+          - task: List Directories
+            tasktype: automojo.taskplus.tasks.shellscript@BashScript
+            script:
+                - ls -al
+
+          - task: Print OS Name
+            tasktype: automojo.taskplus.tasks.embeddedpython@EmbeddedPython
+            script:
+                - import os
+                - print(os.name)
+
