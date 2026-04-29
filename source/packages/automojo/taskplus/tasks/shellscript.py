@@ -46,7 +46,7 @@ class ShellScript(Task):
         with open(tempfile, 'w') as tf:
             tf.write(script_content)
 
-        os.chmod(tempfile, stat.S_IEXEC)
+        os.chmod(tempfile, stat.S_IREAD | stat.S_IWRITE | stat.S_IEXEC)
 
         proc = subprocess.Popen([tempfile], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         stdout, stderr = proc.communicate()

@@ -134,7 +134,7 @@ class Workflow:
                 errmsg_lines = [
                     "Unknown workflow node encountered."
                 ]
-                errmsg_lines.extend(indent_lines(pformat(fnode_info, indent=4, depth=2)))
+                errmsg_lines.append(indent_lines(pformat(fnode_info, indent=4, depth=2), level=1))
 
                 errmsg = os.linesep.join(errmsg_lines)
                 raise ConfigurationError(errmsg)

@@ -25,6 +25,9 @@ python = ">=3.10,<4.0"
 click = "^8.1.3"
 automojo-errors = { git = "https://github.com/automationmojo/automojo-errors.git", branch = "main" }
 automojo-runtime = { git = "https://github.com/automationmojo/automojo-runtime.git", branch = "main" }
+automojo-this-app = { git = "https://github.com/automationmojo/automojo-this-app.git", branch = "main" }
+automojo-xmodules = { git = "https://github.com/automationmojo/automojo-xmodules.git", branch = "main" }
+automojo-testbase = { git = "https://github.com/automationmojo/automojo-testbase.git", branch = "main" }
 pyyaml = "^6.0.2"
 
 [tool.poetry.group.dev.dependencies]
