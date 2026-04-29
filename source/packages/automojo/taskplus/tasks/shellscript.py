@@ -19,8 +19,8 @@ import os
 import stat
 import subprocess
 
-from automojo.foundation.runtime.paths import get_temporary_file
-from automojo.foundation.xformatting import indent_lines
+from automojo.runtime.paths import get_temporary_file
+from automojo.xmodules.xformatting import indent_lines
 
 from automojo.taskplus.model.task import Task
 
@@ -39,7 +39,7 @@ class ShellScript(Task):
 
         script_content = os.linesep.join(self._script)
 
-        tempfile = get_temporary_file(prefix="step-%d" % self._ordinal, suffix=".sh")
+        tempfile = get_temporary_file(prefix="step-%s" % self._ordinal, suffix=".sh")
 
         self._logger.info("Running Script: %s" % tempfile)
 
@@ -52,12 +52,15 @@ class ShellScript(Task):
         stdout, stderr = proc.communicate()
         exit_code = proc.wait()
 
+        stdout_text = stdout.decode()
+        stderr_text = stderr.decode()
+
         log_msg_script = [
             "RESULT CODE: %d" % exit_code,
             "STDOUT:",
-            indent_lines(stdout.read(), level=1),
+            indent_lines(stdout_text, level=1),
             "STDERR:",
-            indent_lines(stderr.read(), level=1),
+            indent_lines(stderr_text, level=1),
         ]
 
         log_msg = os.linesep.join(log_msg_script)

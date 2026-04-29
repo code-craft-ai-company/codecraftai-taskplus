@@ -27,8 +27,8 @@ class FlowEngine:
         return
 
 
-    def evaluate_expression(self, if_expr: str, environment: Dict[str, str], parameters: Dict[str, Any], topology: Dict[str, Any]) -> bool:
-        
+    def evaluate_expression(self, if_expr: str, environment: Dict[str, str], parameters: Dict[str, Any]) -> bool:
+
         flowstate = self._flowstate
 
         eval_result = eval(if_expr)
@@ -47,10 +47,9 @@ class FlowEngine:
 
         flowstate = {}
         errors = []
-        topology = {}
         jump_context = JumpContext()
 
-        self.process_flowitems(environment, parameters, topology, flowstate, errors, flowitems, jump_context)
+        self.process_flowitems(environment, parameters, flowstate, errors, flowitems, jump_context)
 
         if len(errors) > 0:
             result_code = 1

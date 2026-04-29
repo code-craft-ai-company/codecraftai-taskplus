@@ -8,7 +8,7 @@ import os
 import click
 import yaml
 
-from automojo.foundation.xlogging.levels import LOG_LEVEL_NAMES
+from automojo.xmodules.xlogging.levels import LOG_LEVEL_NAMES
 
 HELP_WORK = "The file containing the workpacket detail for performing a workflow orchestration."
 HELP_OUTPUT = "The output directory where results and artifacts are collected."
@@ -36,8 +36,8 @@ def command_taskplus_workflow_run(workflow: str , output: str=None, start=None, 
 
     # IMPORTANT: We need to load the context first because it will trigger the loading
     # of the default user configuration
-    from automojo.foundation.collections.context import Context
-    from automojo.foundation.xpython import prepend_python_path
+    from automojo.thisapp.context import Context
+    from automojo.xmodules.xpython import prepend_python_path
     
 
     ctx = Context()
@@ -58,7 +58,7 @@ def command_taskplus_workflow_run(workflow: str , output: str=None, start=None, 
         from automojo.taskplus.entrypoints import run_workflow_entrypoint
 
         # Run the work packet
-        run_workflow_entrypoint(workflow_file, workflow_info)
+        run_workflow_entrypoint(workflow_file)
 
     else:
         error_msg = "Failure loading the work packet info from. file=%s" % workflow_file

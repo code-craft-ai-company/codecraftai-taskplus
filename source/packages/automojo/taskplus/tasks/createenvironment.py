@@ -74,18 +74,20 @@ class CreateEnvironment(Task):
                     exit_code = proc.wait()
 
                 if exit_code == 0:
-                    var_val = stdout.strip()
+                    var_val = stdout.decode().strip()
                     os.environ[var_name] = var_val
                 else:
+                    stderr_text = stderr.decode()
                     errmsg_lines = [
                         "Error creating environment variable '{}' with:".format(var_name),
                         "COMMAND: {}".format(var_command),
-                        "STDERR: {}".format(stderr)
+                        "STDERR: {}".format(stderr_text)
                     ]
                     errmsg = os.linesep.join(errmsg_lines)
                     self._logger.error(errmsg)
             elif "value" in var_info:
-                var_val = os.path.expandvars(os.path.expanduser(var_val))
+                var_val = os.path.expandvars(os.path.expanduser(var_info["value"]))
+                os.environ[var_name] = var_val
             else:
                 errmsg_lines = [
                     "Error creating environment variable '{}' with:".format(var_name)

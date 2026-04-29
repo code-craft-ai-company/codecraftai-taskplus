@@ -17,7 +17,7 @@ from typing import Any, Dict, Optional
 import os
 import subprocess
 
-from automojo.foundation.xformatting import indent_lines
+from automojo.xmodules.xformatting import indent_lines
 
 from automojo.taskplus.model.task import Task
 

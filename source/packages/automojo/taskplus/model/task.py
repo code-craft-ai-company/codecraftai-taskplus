@@ -20,7 +20,7 @@ import abc
 from logging import Logger
 
 
-from automojo.errors.exceptions import NotOverloadedError
+from automojo.errors.exceptions import AbstractMethodError
 
 from automojo.taskplus.model.flownode import FlowNode
 
@@ -57,5 +57,5 @@ class Task(FlowNode):
 
     @abc.abstractmethod
     def perform_task(self, environment: Dict[str, str], parameters: Optional[Dict[str, Any]], flowstate: Dict[str, Any]) -> int:
-        raise NotOverloadedError("TaskBase->execute must be overloaded by derived classes.") from None
+        raise AbstractMethodError("TaskBase->execute must be overloaded by derived classes.") from None
 

@@ -19,8 +19,8 @@ import yaml
 
 from automojo.errors.exceptions import ConfigurationError
 
-from automojo.foundation.ximport import import_by_name
-from automojo.foundation.xformatting import indent_lines
+from automojo.xmodules.ximport import import_by_name
+from automojo.xmodules.xformatting import indent_lines
 
 from automojo.taskplus.model.flownode import FlowNode
 from automojo.taskplus.model.task import Task
@@ -52,12 +52,12 @@ class Workflow:
     @classmethod
     def parse(cls, workflow_stream: TextIOWrapper) -> "Workflow":
 
-        workflow_info = yaml.safe_load(workflow_stream, Loader=yaml.SafeLoader)
+        workflow_info = yaml.safe_load(workflow_stream)
 
         environment = {}
         if "environment" in workflow_info:
             environment = workflow_info["environment"]
-        
+
         parameters = {}
         if "parameters" in workflow_info:
             parameters = workflow_info["parameters"]
@@ -77,11 +77,13 @@ class Workflow:
         workflow = Workflow(environment, parameters, flow_items)
 
         return workflow
-    
+
     @classmethod
     def _process_flow_info_items(cls, fnode_info_items: List[Dict[str, Any]], ordinal_prefix: str="") -> List[FlowNode]:
 
         flow_items: List[FlowNode] = []
+
+        ordinal_position = 0
 
         for fnode_info in fnode_info_items:
 
@@ -115,7 +117,7 @@ class Workflow:
 
             elif "taskgroup" in fnode_info:
 
-                tg_label = fnode_info["task"]
+                tg_label = fnode_info["taskgroup"]
 
                 if "items" not in fnode_info:
                     errmsg = "A 'taskgroup' node must have an 'items' field."
@@ -125,7 +127,7 @@ class Workflow:
 
                 tg_titems = cls._process_flow_info_items(tg_items_info_list, ordinal_prefix=next_ordinal)
 
-                tgroup_inst = TaskGroup(next_ordinal, tg_label, fnode_info, tg_titems)
+                tgroup_inst = TaskGroup(next_ordinal, tg_label, fnode_info, tg_titems, logger)
                 flow_items.append(tgroup_inst)
 
             else:
@@ -137,4 +139,4 @@ class Workflow:
                 errmsg = os.linesep.join(errmsg_lines)
                 raise ConfigurationError(errmsg)
 
-        return
+        return flow_items

@@ -16,7 +16,7 @@ from typing import Any, Dict, List
 
 import os
 
-from automojo.foundation.ximport import import_by_name
+from automojo.xmodules.ximport import import_by_name
 
 from automojo.errors.exceptions import ConfigurationError
 
@@ -81,18 +81,18 @@ def execute_tasklist(logger, jump_context: JumpContext, parameters: dict, taskli
                 raise ConfigurationError(error_msg) from None
 
         elif "taskgroup" in item:
-            
+
             tg_info: dict = item
             tg_label = tg_info["taskgroup"]
 
             if jump_context.on_success_section is not None:
-                if jump_context.on_success_section != task_label:
+                if jump_context.on_success_section != tg_label:
                     continue
                 else:
                     jump_context.on_success_section = None
 
             if jump_context.on_failure_section is not None:
-                if jump_context.on_failure_section != task_label:
+                if jump_context.on_failure_section != tg_label:
                     continue
                 else:
                     jump_context.on_failure_section = None
@@ -103,13 +103,16 @@ def execute_tasklist(logger, jump_context: JumpContext, parameters: dict, taskli
 
             tg_items = tg_info["items"]
 
+            tg_onfailure = tg_info.get("onfailure", None)
+            tg_onsuccess = tg_info.get("onsuccess", None)
+
             tg_result = execute_tasklist(logger, jump_context, parameters, tg_items, ordinal_prefix=group_prefix)
             if tg_result != 0:
                 result_code = 1
-                if task_instance.onfailure is not None:
-                    jump_context.on_failure_section = task_instance.onfailure
-            elif task_instance.onsuccess is not None:
-                jump_context.on_success_section = task_instance.onsuccess
+                if tg_onfailure is not None:
+                    jump_context.on_failure_section = tg_onfailure
+            elif tg_onsuccess is not None:
+                jump_context.on_success_section = tg_onsuccess
 
         else:
             pass
@@ -124,9 +127,8 @@ def execute_workflow(logger, *, environment: dict, parameters: dict, workflow: l
     for key, val in environment.items():
         os.environ[key] = val
 
-    result_code = 0
     jump_context = JumpContext()
 
-    execute_tasklist(logger, jump_context, parameters, workflow)
+    result_code = execute_tasklist(logger, jump_context, parameters, workflow)
 
     return result_code
