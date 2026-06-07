@@ -19,7 +19,7 @@ import os
 import stat
 import subprocess
 
-from automojo.runtime.paths import get_temporary_file
+from automojo.thisapp.paths import get_temporary_file
 from automojo.xmodules.xformatting import indent_lines
 
 from automojo.taskplus.model.task import Task

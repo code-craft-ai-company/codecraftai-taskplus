@@ -23,7 +23,7 @@ def _ensure_runtime_paths_configured() -> None:
     """
         Ensure the application persona is established and the output
         directory runtime variable is set so that
-        :py:func:`automojo.runtime.paths.get_temporary_file` is able to
+        :py:func:`automojo.thisapp.paths.get_temporary_file` is able to
         resolve a temporary directory.
     """
 
