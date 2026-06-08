@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "automojo-taskplus"
-description = "Automation Mojo Task Plus Library"
+name = "codecraftai-taskplus"
+description = "Code Craft AI Task Plus Library"
 version = "0.0.2"
 authors = [
     "Myron Walker <myron.walker@gmail.com>"
@@ -15,19 +15,19 @@ classifiers = [
 keywords = [
     "python"
 ]
-packages = [{include="automojo", from="source/packages"}]
+packages = [{include="ccai", from="source/packages"}]
 
-homepage = "http://automationmojo.com"
+homepage = "http://code-craft.ai"
 repository = "https://github.com/automationmojo/taskplus"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
 click = "^8.1.3"
-automojo-errors = { git = "https://github.com/automationmojo/automojo-errors.git", branch = "main" }
-automojo-runtime = { git = "https://github.com/automationmojo/automojo-runtime.git", branch = "main" }
-automojo-this-app = { git = "https://github.com/automationmojo/automojo-this-app.git", branch = "main" }
-automojo-xmodules = { git = "https://github.com/automationmojo/automojo-xmodules.git", branch = "main" }
-automojo-testbase = { git = "https://github.com/automationmojo/automojo-testbase.git", branch = "main" }
+codecraftai-errors = { git = "https://github.com/automationmojo/codecraftai-errors.git", branch = "main" }
+codecraftai-runtime = { git = "https://github.com/automationmojo/codecraftai-runtime.git", branch = "main" }
+codecraftai-this-app = { git = "https://github.com/automationmojo/codecraftai-this-app.git", branch = "main" }
+codecraftai-xmodules = { git = "https://github.com/automationmojo/codecraftai-xmodules.git", branch = "main" }
+codecraftai-testbase = { git = "https://github.com/automationmojo/codecraftai-testbase.git", branch = "main" }
 pyyaml = "^6.0.2"
 
 [tool.poetry.group.dev.dependencies]
