@@ -144,7 +144,8 @@ def test_perform_task_with_command_sets_stripped_stdout_as_value() -> None:
 
 
 def test_perform_task_with_missing_value_and_command_does_not_raise() -> None:
-    """A variable info missing both ``command`` and ``value`` is skipped without raising."""
+    """A variable info missing both ``command`` and ``value`` does not raise, is not
+    set, and reports a non-zero status code (the malformed entry is a failure)."""
 
     var_name = "TASKPLUS_TEST_VAR_NEITHER"
 
@@ -166,7 +167,7 @@ def test_perform_task_with_missing_value_and_command_does_not_raise() -> None:
         is_set = var_name in os.environ
 
         verification.assert_equal(raised, False)
-        verification.assert_equal(status_code, 0)
+        verification.assert_equal(status_code, 1)
         verification.assert_equal(is_set, False)
     finally:
         if var_name in os.environ:

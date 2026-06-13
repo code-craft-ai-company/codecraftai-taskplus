@@ -23,14 +23,16 @@ class JumpContext:
 class FlowEngine:
 
     def __init__(self):
-        self._flowstate = {}
         return
 
 
-    def evaluate_expression(self, if_expr: str, environment: Dict[str, str], parameters: Dict[str, Any]) -> bool:
+    def evaluate_expression(self, if_expr: str, environment: Dict[str, str], parameters: Dict[str, Any], flowstate: Dict[str, Any]) -> bool:
 
-        flowstate = self._flowstate
-
+        # ``flowstate`` is the per-run state threaded through ``process_flowitems``
+        # and updated by each task; an ``if:`` expression is evaluated against it
+        # (plus ``environment``/``parameters``) so conditional flow can reference
+        # accumulated state. (Previously this read the always-empty instance
+        # ``self._flowstate`` and was passed no per-run state at all.)
         eval_result = eval(if_expr)
 
         return eval_result
@@ -73,7 +75,7 @@ class FlowEngine:
 
             include_node = True
             if fitem.if_expr is not None:
-                include_node = self.evaluate_expression(fitem.if_expr, environment, parameters)
+                include_node = self.evaluate_expression(fitem.if_expr, environment, parameters, flowstate)
 
             if include_node:
                 if isinstance(fitem, Task):
@@ -81,7 +83,17 @@ class FlowEngine:
                     task_result = fitem.execute(environment, parameters, flowstate)
                     if task_result != 0:
                         if fitem.onfailure is not None:
+                            # The failure is routed to a handler node -- treat it
+                            # as handled and let the handler decide the outcome.
                             jump_context.seeking_node = fitem.onfailure
+                        else:
+                            # An unhandled task failure must surface so that
+                            # execute() returns a non-zero code (CI gating).
+                            failure_info = {
+                                "node": node_label,
+                                "result_code": task_result,
+                            }
+                            errors.append(failure_info)
                     elif fitem.onsuccess is not None:
                         jump_context.seeking_node = fitem.onsuccess
 

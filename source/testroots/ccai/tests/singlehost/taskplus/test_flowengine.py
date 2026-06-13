@@ -103,7 +103,7 @@ def test_evaluate_expression_simple_true_literal_returns_true() -> None:
 
     engine = FlowEngine()
 
-    result_value = engine.evaluate_expression(if_expr="True", environment={}, parameters={})
+    result_value = engine.evaluate_expression(if_expr="True", environment={}, parameters={}, flowstate={})
 
     verification.assert_equal(result_value, True)
     return
@@ -114,7 +114,7 @@ def test_evaluate_expression_simple_false_literal_returns_false() -> None:
 
     engine = FlowEngine()
 
-    result_value = engine.evaluate_expression(if_expr="False", environment={}, parameters={})
+    result_value = engine.evaluate_expression(if_expr="False", environment={}, parameters={}, flowstate={})
 
     verification.assert_equal(result_value, False)
     return
@@ -125,22 +125,22 @@ def test_evaluate_expression_arithmetic_equality_returns_true() -> None:
 
     engine = FlowEngine()
 
-    result_value = engine.evaluate_expression(if_expr="1 + 1 == 2", environment={}, parameters={})
+    result_value = engine.evaluate_expression(if_expr="1 + 1 == 2", environment={}, parameters={}, flowstate={})
 
     verification.assert_equal(result_value, True)
     return
 
 
 def test_evaluate_expression_can_read_flowstate() -> None:
-    """``evaluate_expression`` exposes the engine ``_flowstate`` as a local named ``flowstate``."""
+    """``evaluate_expression`` exposes the per-run ``flowstate`` argument as a local named ``flowstate``."""
 
     engine = FlowEngine()
-    engine._flowstate = {"key": "value"}
 
     result_value = engine.evaluate_expression(
         if_expr="flowstate['key'] == 'value'",
         environment={},
         parameters={},
+        flowstate={"key": "value"},
     )
 
     verification.assert_equal(result_value, True)
@@ -156,6 +156,7 @@ def test_evaluate_expression_can_read_environment() -> None:
         if_expr="environment['VAR'] == 'X'",
         environment={"VAR": "X"},
         parameters={},
+        flowstate={},
     )
 
     verification.assert_equal(result_value, True)
@@ -171,6 +172,7 @@ def test_evaluate_expression_can_read_parameters() -> None:
         if_expr="parameters['count'] == 3",
         environment={},
         parameters={"count": 3},
+        flowstate={},
     )
 
     verification.assert_equal(result_value, True)
@@ -368,7 +370,8 @@ def test_execute_onsuccess_jumps_to_named_node_and_skips_others() -> None:
 
 
 def test_execute_onfailure_without_handler_does_not_jump() -> None:
-    """A failing task without an ``onfailure`` field does not alter execution flow."""
+    """A failing task without an ``onfailure`` handler does not jump, but the
+    unhandled failure surfaces as a non-zero result code."""
 
     failing_task = _make_task(label="failer", ordinal="1", return_code=1)
     next_task = _make_task(label="next", ordinal="2", return_code=0)
@@ -379,7 +382,7 @@ def test_execute_onfailure_without_handler_does_not_jump() -> None:
 
     verification.assert_equal(failing_task.call_count, 1)
     verification.assert_equal(next_task.call_count, 1)
-    verification.assert_equal(result_code, 0)
+    verification.assert_equal(result_code, 1)
     return
 
 

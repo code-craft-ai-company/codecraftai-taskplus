@@ -85,14 +85,16 @@ class CreateEnvironment(Task):
                     ]
                     errmsg = os.linesep.join(errmsg_lines)
                     self._logger.error(errmsg)
+                    status_code = 1
             elif "value" in var_info:
                 var_val = os.path.expandvars(os.path.expanduser(var_info["value"]))
                 os.environ[var_name] = var_val
             else:
                 errmsg_lines = [
-                    "Error creating environment variable '{}' with:".format(var_name)
+                    "Error creating environment variable '{}': neither 'command' nor 'value' was specified.".format(var_name)
                 ]
                 errmsg = os.linesep.join(errmsg_lines)
                 self._logger.error(errmsg)
-            
+                status_code = 1
+
         return status_code

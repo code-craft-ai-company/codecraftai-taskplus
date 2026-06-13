@@ -6,10 +6,10 @@ authors = [
     "Myron Walker <myron.walker@gmail.com>"
 ]
 readme = "README.md"
-license = "LICENSE.txt"
+license = "LicenseRef-CodeCraftAI-Dual-License"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
+    "License :: Other/Proprietary License",
     "Operating System :: POSIX"
 ]
 keywords = [
@@ -17,8 +17,8 @@ keywords = [
 ]
 packages = [{include="ccai", from="source/packages"}]
 
-homepage = "http://code-craft.ai"
-repository = "https://github.com/automationmojo/taskplus"
+homepage = "https://code-craft.ai"
+repository = "https://github.com/automationmojo/codecraftai-taskplus"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
@@ -27,15 +27,17 @@ codecraftai-errors = { git = "https://github.com/automationmojo/codecraftai-erro
 codecraftai-runtime = { git = "https://github.com/automationmojo/codecraftai-runtime.git", branch = "main" }
 codecraftai-this-app = { git = "https://github.com/automationmojo/codecraftai-this-app.git", branch = "main" }
 codecraftai-xmodules = { git = "https://github.com/automationmojo/codecraftai-xmodules.git", branch = "main" }
-codecraftai-testbase = { git = "https://github.com/automationmojo/codecraftai-testbase.git", branch = "main" }
 pyyaml = "^6.0.2"
 
+[tool.poetry.scripts]
+taskplus = "ccai.taskplus.cli.taskpluscommand:taskplus_root_command"
+
 [tool.poetry.group.dev.dependencies]
+pytest = "^9.0.2"
+codecraftai-testbase = { git = "https://github.com/automationmojo/codecraftai-testbase.git", branch = "main" }
 myst-parser = "^0.18.1"
 sphinx = ">=1.6,<6"
 sphinx-rtd-theme = "^1.1.1"
-
-[tool.poetry.group.dbio.dependencies]
 
 [build-system]
 requires = ["poetry-core"]
