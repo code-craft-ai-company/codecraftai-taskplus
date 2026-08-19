@@ -18,15 +18,15 @@ keywords = [
 packages = [{include="ccai", from="source/packages"}]
 
 homepage = "https://code-craft.ai"
-repository = "https://github.com/automationmojo/codecraftai-taskplus"
+repository = "https://github.com/code-craft-ai-company/codecraftai-taskplus"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
 click = "^8.1.3"
-codecraftai-errors = { git = "https://github.com/automationmojo/codecraftai-errors.git", branch = "main" }
-codecraftai-runtime = { git = "https://github.com/automationmojo/codecraftai-runtime.git", branch = "main" }
-codecraftai-this-app = { git = "https://github.com/automationmojo/codecraftai-this-app.git", branch = "main" }
-codecraftai-xmodules = { git = "https://github.com/automationmojo/codecraftai-xmodules.git", branch = "main" }
+codecraftai-errors = { git = "https://github.com/code-craft-ai-company/codecraftai-errors.git", branch = "main" }
+codecraftai-runtime = { git = "https://github.com/code-craft-ai-company/codecraftai-runtime.git", branch = "main" }
+codecraftai-this-app = { git = "https://github.com/code-craft-ai-company/codecraftai-this-app.git", branch = "main" }
+codecraftai-xmodules = { git = "https://github.com/code-craft-ai-company/codecraftai-xmodules.git", branch = "main" }
 pyyaml = "^6.0.2"
 
 [tool.poetry.scripts]
@@ -34,7 +34,7 @@ taskplus = "ccai.taskplus.cli.taskpluscommand:taskplus_root_command"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^9.0.2"
-codecraftai-testbase = { git = "https://github.com/automationmojo/codecraftai-testbase.git", branch = "main" }
+codecraftai-testbase = { git = "https://github.com/code-craft-ai-company/codecraftai-testbase.git", branch = "main" }
 myst-parser = "^0.18.1"
 sphinx = ">=1.6,<6"
 sphinx-rtd-theme = "^1.1.1"
