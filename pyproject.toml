@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "codecraftai-taskplus"
 description = "Code Craft AI Task Plus Library"
-version = "1.0.0"
+version = "1.0.1"
 authors = [
     "Myron Walker <myron.walker@gmail.com>"
 ]
@@ -23,7 +23,7 @@ repository = "https://github.com/code-craft-ai-company/codecraftai-taskplus"
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
 click = "^8.1.3"
-codecraftai-errors = { version = "<2.0.0", source = "codecraftai" }
+codecraftai-foundations = { version = "<2.0.0", source = "codecraftai" }
 codecraftai-runtime = { version = "<2.0.0", source = "codecraftai" }
 codecraftai-this-app = { version = "<2.0.0", source = "codecraftai" }
 codecraftai-xmodules = { version = "<2.0.0", source = "codecraftai" }
