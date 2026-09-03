@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "codecraftai-taskplus"
 description = "Code Craft AI Task Plus Library"
-version = "1.0.1"
+version = "1.0.2"
 authors = [
     "Myron Walker <myron.walker@gmail.com>"
 ]

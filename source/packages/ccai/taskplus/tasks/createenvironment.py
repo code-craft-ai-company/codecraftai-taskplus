@@ -61,7 +61,8 @@ class CreateEnvironment(Task):
                             vecsf.write("#!/usr/bin/env bash\n")
                             vecsf.write("cd {}\n".format(virtual_env_bin))
                             vecsf.write("source {}\n".format(virtual_env_activate_script))
-                            vecsf.write("\"$@\"\n")
+                            # The command arrives as one shell string; evaluate it rather than executing it as a program name.
+                            vecsf.write("eval \"$@\"\n")
                         os.chmod(virtual_env_cmd_script, stat.S_IREAD | stat.S_IWRITE | stat.S_IEXEC)
 
                     proc = subprocess.Popen([virtual_env_cmd_script, var_command], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
