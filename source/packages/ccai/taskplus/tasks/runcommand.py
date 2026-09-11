@@ -22,6 +22,12 @@ from ccai.xmodules.xformatting import indent_lines
 from ccai.taskplus.model.task import Task
 
 class RunCommand(Task):
+    """
+        A task class that runs a single command line through the platform shell
+        ('/bin/sh' on POSIX systems, 'cmd.exe' on Windows).  The 'command' entry
+        of the task information is a shell line, not an argument vector, so shell
+        built-ins such as 'echo' and 'exit' are valid commands.
+    """
 
     def __init__(self, ordinal: str, label: str, task_info: dict, logger):
         super(RunCommand, self).__init__(ordinal, label, task_info, logger)
@@ -36,7 +42,9 @@ class RunCommand(Task):
 
         self._logger.info("Running Command: %s" % self._command)
 
-        proc = subprocess.Popen([self._command], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        # The command is a shell line, so it must be handed to the shell as a single string.  Wrapping it
+        # in a list makes Windows re-quote the whole line into one token ('"echo hello"' is not recognized).
+        proc = subprocess.Popen(self._command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         stdout, stderr = proc.communicate()
         exit_code = proc.wait()
 

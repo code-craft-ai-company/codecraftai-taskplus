@@ -25,6 +25,12 @@ from ccai.xmodules.xformatting import indent_lines
 from ccai.taskplus.model.task import Task
 
 class ShellScript(Task):
+    """
+        A task class that writes the 'script' lines of the task information to a
+        temporary script file and runs that file with the platform shell.  On POSIX
+        systems the script is a '.sh' file run by '/bin/sh', on Windows it is a
+        '.cmd' file run by 'cmd.exe'.
+    """
 
     def __init__(self, ordinal: str, label: str, task_info: dict, logger):
         super(ShellScript, self).__init__(ordinal, label, task_info, logger)
@@ -39,7 +45,13 @@ class ShellScript(Task):
 
         script_content = os.linesep.join(self._script)
 
-        tempfile = get_temporary_file(prefix="step-%s" % self._ordinal, suffix=".sh")
+        # The platform shell only runs script files it recognizes, so the suffix has to match the shell.
+        if os.name == "nt":
+            script_suffix = ".cmd"
+        else:
+            script_suffix = ".sh"
+
+        tempfile = get_temporary_file(prefix="step-%s" % self._ordinal, suffix=script_suffix)
 
         self._logger.info("Running Script: %s" % tempfile)
 
@@ -48,7 +60,8 @@ class ShellScript(Task):
 
         os.chmod(tempfile, stat.S_IREAD | stat.S_IWRITE | stat.S_IEXEC)
 
-        proc = subprocess.Popen([tempfile], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        # Hand the script path to the shell as a single string so it is not re-quoted on Windows.
+        proc = subprocess.Popen(tempfile, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         stdout, stderr = proc.communicate()
         exit_code = proc.wait()
 

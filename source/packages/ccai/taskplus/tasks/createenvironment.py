@@ -15,7 +15,6 @@ __credits__ = []
 from typing import Any, Dict, Optional
 
 import os
-import stat
 import subprocess
 
 from ccai.taskplus.model.task import Task
@@ -45,34 +44,30 @@ class CreateEnvironment(Task):
             if "command" in var_info:
                 var_command = var_info["command"]
 
-                stdout, stderr, exit_code = None, None, None
+                command_env = dict(os.environ)
 
-                # If "VIRTUAL_ENV" is set then we are running in a virtual environment, setup to run the shell
-                # command in the same virtual environment we are currently running in.
+                # If "VIRTUAL_ENV" is set then we are running in a virtual environment, run the shell command
+                # with the same virtual environment active.  Activation is expressed through the environment
+                # of the child process (what an 'activate' script does) rather than a POSIX wrapper script, so
+                # it works with both 'bin' (POSIX) and 'Scripts' (Windows) virtual environment layouts.
                 if "VIRTUAL_ENV" in os.environ:
                     virtual_env = os.environ["VIRTUAL_ENV"]
-                    virtual_env_bin = os.path.join(virtual_env, 'bin')
-                    virtual_env_activate_script = os.path.join(virtual_env_bin, 'activate')
-                    
-                    virtual_env_cmd_script = os.path.join(virtual_env_bin, 'virtual_env_cmd')
 
-                    if not os.path.exists(virtual_env_cmd_script):
-                        with open(virtual_env_cmd_script, 'w') as vecsf:
-                            vecsf.write("#!/usr/bin/env bash\n")
-                            vecsf.write("cd {}\n".format(virtual_env_bin))
-                            vecsf.write("source {}\n".format(virtual_env_activate_script))
-                            # The command arrives as one shell string; evaluate it rather than executing it as a program name.
-                            vecsf.write("eval \"$@\"\n")
-                        os.chmod(virtual_env_cmd_script, stat.S_IREAD | stat.S_IWRITE | stat.S_IEXEC)
+                    if os.name == "nt":
+                        virtual_env_bin = os.path.join(virtual_env, 'Scripts')
+                    else:
+                        virtual_env_bin = os.path.join(virtual_env, 'bin')
 
-                    proc = subprocess.Popen([virtual_env_cmd_script, var_command], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                    stdout, stderr = proc.communicate()
-                    exit_code = proc.wait()
+                    command_env["VIRTUAL_ENV"] = virtual_env
+                    command_env["PATH"] = os.pathsep.join([virtual_env_bin, os.environ.get("PATH", "")])
+                    if "PYTHONHOME" in command_env:
+                        del command_env["PYTHONHOME"]
 
-                else:
-                    proc = subprocess.Popen([var_command], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-                    stdout, stderr = proc.communicate()
-                    exit_code = proc.wait()
+                # The command is a shell line, so it must be handed to the shell as a single string.  Wrapping it
+                # in a list makes Windows re-quote the whole line into one token that is not recognized.
+                proc = subprocess.Popen(var_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, env=command_env)
+                stdout, stderr = proc.communicate()
+                exit_code = proc.wait()
 
                 if exit_code == 0:
                     var_val = stdout.decode().strip()
