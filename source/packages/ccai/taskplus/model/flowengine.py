@@ -4,9 +4,7 @@ __copyright__ = "Copyright 2025, Code Craft AI LLC"
 __credits__ = []
 
 
-from typing import Any, Dict, List, Optional
-
-from ccai.errors.exceptions import ConfigurationError
+from typing import Any, Dict, List
 
 from ccai.taskplus.model.flownode import FlowNode
 from ccai.taskplus.model.task import Task

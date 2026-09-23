@@ -153,7 +153,6 @@ class WorkflowQuery(Workflow):
             self.call_graph[-1]['outputs'] = output_schema
 
     def each(self, loop_iterator):
-        condition_code = "Unknown"
         if hasattr(loop_iterator, 'condition_lambda'):
              # Attempt to capture the lambda source like before
              # For now, we reuse the existing _capture_expression logic if possible, 

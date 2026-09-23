@@ -98,8 +98,6 @@ def execute_tasklist(logger, jump_context: JumpContext, parameters: dict, taskli
                     jump_context.on_failure_section = None
 
             group_prefix = nxt_ordinal
-            if ordinal_prefix is not None:
-                nxt_ordinal = "{}.{}".format(ordinal_prefix, group_prefix)
 
             tg_items = tg_info["items"]
 
