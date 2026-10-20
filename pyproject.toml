@@ -1,6 +1,6 @@
 [project]
 name = "codecraftai-taskplus"
-version = "1.3.0"
+version = "1.3.1"
 description = "Code Craft AI Task Plus Library"
 readme = "README.md"
 license = "LicenseRef-CodeCraftAI-Source-Available"
